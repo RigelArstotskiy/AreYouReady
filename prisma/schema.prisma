@@ -1,0 +1,159 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//----------------Users
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  password  String?
+  isStudent Boolean  @default(false)
+  isMentor  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  //----------------connections
+  mentorProfile     MentorProfile?
+  sessionsAsStudent Session[]  @relation("StudentSessions")
+  reviews           Review[]
+  cvUploads         CvUpload[]
+  cvComments        CvComment[]
+  testResults       TestResult[]
+}
+
+//----------------Marketplace
+model MentorProfile {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  position      String
+  description   String
+  priceUsd      Int?
+  rating        Float    @default(0)
+  sessionsCount Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  techStack    MentorTechStack[]
+  serviceTypes MentorServiceType[]
+  sessions     Session[]
+}
+
+model MentorTechStack {
+  id       String        @id @default(uuid())
+  mentorId String
+  mentor   MentorProfile @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  tech     String
+}
+
+model MentorServiceType {
+  id          String        @id @default(uuid())
+  mentorId    String
+  mentor      MentorProfile @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  serviceType String
+}
+
+//----------------Sessions and reviews
+model Session {
+  id            String        @id @default(uuid())
+  studentId     String
+  student       User          @relation("StudentSessions", fields: [studentId], references: [id])
+  mentorId      String
+  mentor        MentorProfile @relation(fields: [mentorId], references: [id])
+
+  serviceType   String
+  studentLevel  String
+  goal          String
+  preferredTime String?
+  status        String        @default("pending")
+  createdAt     DateTime      @default(now())
+
+  review        Review?
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  sessionId String   @unique
+  session   Session  @relation(fields: [sessionId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+
+  rating    Int
+  text      String
+  createdAt DateTime @default(now())
+}
+
+//----------------CV
+model CvUpload {
+  id         String      @id @default(uuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+
+  filePath   String
+  position   String
+  experience String
+  createdAt  DateTime    @default(now())
+
+  comments   CvComment[]
+}
+
+model CvComment {
+  id        String   @id @default(uuid())
+  cvId      String
+  cv        CvUpload @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+
+  text      String
+  createdAt DateTime @default(now())
+}
+
+//----------------Tests
+model QuestionCategory {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  questions   Question[]
+  testResults TestResult[]
+}
+
+model Question {
+  id         String           @id @default(uuid())
+  categoryId String
+  category   QuestionCategory @relation(fields: [categoryId], references: [id])
+
+  text      String
+  createdAt DateTime @default(now())
+
+  options AnswerOption[]
+}
+
+model AnswerOption {
+  id         String   @id @default(uuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  text      String
+  isCorrect Boolean  @default(false)
+}
+
+model TestResult {
+  id         String           @id @default(uuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  categoryId String
+  category   QuestionCategory @relation(fields: [categoryId], references: [id])
+
+  total     Int
+  correct   Int
+  createdAt DateTime @default(now())
+}
