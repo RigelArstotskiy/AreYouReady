@@ -5,13 +5,20 @@ import bcrypt from "bcryptjs";
 export async function POST(request: Request) {
   try {
     //шаг 0. получил данные из тела запроса
-    const { email, password } = await request.json();
+    const { email, password, isStudent, isMentor } = await request.json();
     //шаг 1. проверяем пустое ли поле
     if (!email || !password) {
       return NextResponse.json({ message: "Заполните поля" }, { status: 400 });
     }
+    //проверка роли(хотя бы одна)
+    if (!isStudent && !isMentor) {
+      return NextResponse.json(
+        { message: "Пожалуйста выберите одну роль" },
+        { status: 400 },
+      );
+    }
     if (password.length < 6) {
-      //вот тут проверку на длину нужно сделать
+      //вот тут проверка на длину
       return NextResponse.json(
         { message: "Пароль короче 6 символов" },
         { status: 400 },
@@ -35,8 +42,8 @@ export async function POST(request: Request) {
       data: {
         password: hashPassword, //т.к. отправляем через Призму, нужно в этом объекте использовать то что я описывал в схеме Призмы
         email,
-        isStudent: false,
-        isMentor: false,
+        isStudent: isStudent,
+        isMentor: isMentor,
       },
     });
     //шаг 5. успешное создание пользователя
