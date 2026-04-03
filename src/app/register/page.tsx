@@ -75,7 +75,7 @@ export default function RegisterForm() {
         onChange={(e) => setEmail(e.target.value)}
       />
       <input //password
-        type="text"
+        type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
