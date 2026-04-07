@@ -42,6 +42,10 @@ export default function SignIn() {
     setLoading(false);
     router.push("/dashboard");
   };
+  //редирект на регистрацию
+  const handleRegister = async () => {
+    router.push("/register");
+  };
   return (
     <div>
       <input
@@ -58,6 +62,7 @@ export default function SignIn() {
       <button onClick={handleSubmit}>
         {loading ? "Выполняется вход" : "Войти"}
       </button>
+      <button onClick={handleRegister}>Регистрация</button>
     </div>
   );
 }

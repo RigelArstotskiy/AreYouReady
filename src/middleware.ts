@@ -1,10 +1,10 @@
 //импорты
-import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 //логика
 export default async function middleware(request: NextRequest) {
-  //запускаем саму работу мидлвавы - даём ей данные
+  //запускаем саму работу мидлвары - даём ей данные
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
