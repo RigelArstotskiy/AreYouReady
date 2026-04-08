@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import StudentView from "./StudentView";
 
 //логика
 export default async function DashboardPage() {
@@ -12,13 +13,20 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  if (!session.user.isMentor) {
+    redirect("/"); //возврат на главную страницу для студента, т.к. ему дешборд не нужен
+  }
+
   //разметка
   return (
     <div>
-      <h1>Дешборд</h1>
-      <p>Привет, {session.user.email}</p>
-      {session.user.isStudent && <p>Ты студент</p>}
-      {session.user.isMentor && <p>Ты ментор</p>}
+      {session.user.isMentor && (
+        <StudentView
+          email={session.user.email}
+          isStudent={session.user.isStudent}
+          isMentor={session.user.isMentor}
+        />
+      )}
     </div>
   );
 }
