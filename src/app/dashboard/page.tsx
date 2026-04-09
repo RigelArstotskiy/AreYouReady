@@ -2,7 +2,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
-import StudentView from "./StudentView";
+import MentorView from "./MentorView";
 
 //логика
 export default async function DashboardPage() {
@@ -21,7 +21,7 @@ export default async function DashboardPage() {
   return (
     <div>
       {session.user.isMentor && (
-        <StudentView
+        <MentorView
           email={session.user.email}
           isStudent={session.user.isStudent}
           isMentor={session.user.isMentor}
