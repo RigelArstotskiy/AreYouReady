@@ -38,6 +38,7 @@ model MentorProfile {
   position      String
   description   String
   priceUsd      Int?
+  contactInfo   String?
   rating        Float    @default(0)
   sessionsCount Int      @default(0)
   createdAt     DateTime @default(now())

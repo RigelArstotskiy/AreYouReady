@@ -16,7 +16,7 @@ export async function GET() {
     //создаём тело запроса
     where: { userId: session.user.id }, //это стандартный синтаксис метода findUnique
     include: {
-      // взял их из схемы призмы
+      // взял их из схемы призмы, это добавляем, чтобы получить введённые поля, без include получил бы только запить Ментора без вложенных данных.
       techStack: true,
       serviceTypes: true,
     },
@@ -41,9 +41,30 @@ export async function POST(request: Request) {
       userId: session.user.id,
       position: body.position,
       description: body.description,
+      contactInfo: body.contactInfo,
       priceUsd: body.priceUsd ?? null,
     },
   });
 
+  return NextResponse.json({ profile });
+}
+
+//обновляем информацию ментора в БД
+export async function PATCH(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user.isMentor) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const profile = await prisma.mentorProfile.update({
+    where: { userId: session.user.id },
+    data: {
+      position: body.position,
+      description: body.description,
+      contactInfo: body.contactInfo,
+      priceUsd: body.priceUsd ?? null,
+    },
+  });
   return NextResponse.json({ profile });
 }

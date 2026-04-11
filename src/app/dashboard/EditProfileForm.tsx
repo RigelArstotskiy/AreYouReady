@@ -1,29 +1,35 @@
 "use client";
 //импорты
 import { useState } from "react";
-
-//интерфейсы
-interface CreatProfileFormProps {
-  onSuccess: () => void; //не почему тут будет такой синтаксис, зачем он нужен, void - потому что функция будет без аргументов?
+//интерфейс
+interface EditProfileFormProps {
+  profile: {
+    position: string;
+    description: string;
+    priceUsd: number | null;
+    contactInfo: string | null;
+  };
+  onSuccess: () => void;
 }
 //логика
-export default function CreateProfileForm({
+export default function EditProfileForm({
+  profile,
   onSuccess,
-}: CreatProfileFormProps) {
-  //стейты
-  const [position, setPosition] = useState("");
-  const [description, setDescription] = useState("");
-  const [priceUsd, setPriceUsd] = useState("");
-  const [contactInfo, setContactInfo] = useState("");
+}: EditProfileFormProps) {
+  //стейты - я не знаю как мне вставить то что уже известно, просто поставить в скобках стейта position я не могу, как правильно?
+  const [position, setPosition] = useState(profile.position);
+  const [description, setDescription] = useState(profile.description);
+  const [priceUsd, setPriceUsd] = useState(profile.priceUsd?.toString() ?? "");
+  const [contactInfo, setContactInfo] = useState(profile.contactInfo ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  //кладу данные в БД
+  //обновляю данные в БД(метод PATCH)
   const handleSubmit = () => {
     setLoading(true);
 
     fetch("/api/mentor/profile", {
-      method: "POST",
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         position,
@@ -38,7 +44,7 @@ export default function CreateProfileForm({
       });
   };
 
-  if (loading) return <div>Сохранение...</div>; //в случае успеха пусть отображается для UI
+  if (loading) return <div>Сохранение...</div>;
 
   return (
     <div>
