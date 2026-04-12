@@ -20,6 +20,14 @@ interface MentorProfileData {
   techStack: { id: string; tech: string }[];
   serviceTypes: { id: string; serviceType: string }[];
 }
+interface MentorSession {
+  id: string;
+  serviceType: string;
+  studentLevel: string;
+  goal: string;
+  status: string;
+  student: { name: string; email: string };
+}
 
 export default function MentorView({
   email,
@@ -31,6 +39,7 @@ export default function MentorView({
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false); //новый стейт для отображения формы для внесения информации про ментора
   const [isEditing, setIsEditing] = useState(false); // ещё один стейт, но уже для редактирования информации ментора
+  const [sessions, setSessions] = useState<MentorSession[]>([]); //новый стейт, нужен для отображения списка запросов к ментору и это вроде как просто пустые квадратные скобки потому что массив
 
   //подтягиваем данные из БД за счёт АПИ роута, перетаскиваю это в новую функцию которую использовать для ручной инвалидации
   const loadProfile = () => {
@@ -40,6 +49,13 @@ export default function MentorView({
       .then((data) => {
         setProfile(data.profile);
         setLoading(false);
+      });
+
+    //новый фетч, к сессиям чтобы отображать список запросов
+    fetch("/api/mentor/sessions")
+      .then((res) => res.json())
+      .then((data) => {
+        setSessions(data.sessions);
       });
   };
 
@@ -59,7 +75,6 @@ export default function MentorView({
       </div>
     );
 
-  // основной рендер, когда данные уже есть
   // основной рендер, когда данные уже есть
   return (
     <div>
@@ -92,6 +107,23 @@ export default function MentorView({
           <button onClick={() => setIsEditing(true)}>
             Редактировать профиль
           </button>
+          <h2>Входящие заявки</h2>
+          {sessions.length === 0 ? (
+            <p>Заявок пока нет</p>
+          ) : (
+            <ul>
+              {sessions.map((s) => (
+                <li key={s.id}>
+                  <p>
+                    {s.student.name} — {s.serviceType}
+                  </p>
+                  <p>Уровень: {s.studentLevel}</p>
+                  <p>Цель: {s.goal}</p>
+                  <p>Статус: {s.status}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>
