@@ -3,6 +3,7 @@ declare module "next-auth" {
     id: string;
     isStudent: boolean;
     isMentor: boolean;
+    image: string | null;
   }
 
   interface Session {
@@ -11,6 +12,7 @@ declare module "next-auth" {
       email: string;
       isStudent: boolean;
       isMentor: boolean;
+      image: string | null;
     };
   }
 }
@@ -20,5 +22,6 @@ declare module "next-auth/jwt" {
     id: string;
     isStudent: boolean;
     isMentor: boolean;
+    image: string | null;
   }
 }

@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           isStudent: user.isStudent,
           isMentor: user.isMentor,
+          image: user.image,
         }; //return user
       },
     }),
@@ -43,6 +44,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.isStudent = user.isStudent;
         token.isMentor = user.isMentor;
+        token.image = user.image;
       }
       return token;
     },
@@ -51,6 +53,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.isStudent = token.isStudent as boolean;
         session.user.isMentor = token.isMentor as boolean;
+        session.user.image = token.image as string | null;
       }
       return session;
     },

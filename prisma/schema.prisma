@@ -15,6 +15,7 @@ model User {
   email     String   @unique
   name      String?
   image     String?
+  bio       String?
   password  String?
   isStudent Boolean  @default(false)
   isMentor  Boolean  @default(false)

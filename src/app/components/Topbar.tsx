@@ -1,7 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import LogoutButton from "./LogoutButton";
 import Link from "next/link";
+import UserMenu from "./UserMenu";
 
 export default async function Topbar() {
   const session = await getServerSession(authOptions);
@@ -12,9 +12,7 @@ export default async function Topbar() {
       <Link href="/">Are You Ready?</Link>
       <Link href="/dashboard">Dashboard</Link>
       {session ? (
-        <div>
-          <LogoutButton />
-        </div>
+        <UserMenu email={session.user.email ?? ""} />
       ) : (
         <Link href="/login">Войти</Link>
       )}
