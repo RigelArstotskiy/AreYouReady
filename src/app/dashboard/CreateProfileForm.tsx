@@ -1,27 +1,21 @@
 "use client";
-//импорты
 import { useState } from "react";
 
-//интерфейсы
 interface CreatProfileFormProps {
-  onSuccess: () => void; //не почему тут будет такой синтаксис, зачем он нужен, void - потому что функция будет без аргументов?
+  onSuccess: () => void;
 }
-//логика
+
 export default function CreateProfileForm({
   onSuccess,
 }: CreatProfileFormProps) {
-  //стейты
   const [position, setPosition] = useState("");
   const [description, setDescription] = useState("");
   const [priceUsd, setPriceUsd] = useState("");
   const [contactInfo, setContactInfo] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  //кладу данные в БД
   const handleSubmit = () => {
     setLoading(true);
-
     fetch("/api/mentor/profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,38 +28,46 @@ export default function CreateProfileForm({
     })
       .then((res) => res.json())
       .then(() => {
-        onSuccess(); //вызываю loadProfile в MentorView
+        onSuccess();
       });
   };
 
-  if (loading) return <div>Сохранение...</div>; //в случае успеха пусть отображается для UI
+  if (loading)
+    return <div className="text-gray-500 text-sm">Сохранение...</div>;
 
   return (
-    <div>
-      {" "}
+    <div className="w-full flex flex-col gap-3 mt-4">
       <input
         value={position}
         onChange={(e) => setPosition(e.target.value)}
         placeholder="Позиция"
+        className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Описание"
+        className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         value={priceUsd}
         onChange={(e) => setPriceUsd(e.target.value)}
         placeholder="Цена (необязательно)"
         type="number"
+        className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         value={contactInfo}
         onChange={(e) => setContactInfo(e.target.value)}
         placeholder="Контактные данные"
+        className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button onClick={handleSubmit}>Сохранить</button>
-      {error && <p>{error}</p>}
+      <button
+        onClick={handleSubmit}
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      >
+        Сохранить
+      </button>
     </div>
   );
 }

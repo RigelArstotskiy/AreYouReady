@@ -1,29 +1,19 @@
 "use client";
 
-//импорты
-import { useRouter } from "next/navigation"; //тут был router исправил на navigation
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-//логика
+
 export default function RegisterForm() {
-  //скобки круглые - это объявление параметров функции, они пустые тут потому что формула не принимает данных извне, а сама создаёт свои стейты
-  //также помни, что функции в Реакте пишутся с большой буквы с самого начала
-  //стейты
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isStudent, setIsStudent] = useState(false);
   const [isMentor, setIsMentor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  //вроде как больше вне return мне писать ничего не нужно, вся остальная логика идёт в сам ретёрн? Ошибка - в return ТОЛЬКО разметка с уже использованием логики описанной ДО него
-
-  //объявляю роутер чтобы он работал в хендлере
   const router = useRouter();
 
-  //тут указываю handler-ы, которые позже будут работать в разметке
   const handleSubmit = async () => {
-    setError(""); //сбросили старую ошибку
-
-    //ошибки в инпутах
+    setError("");
     if (!email || !password) {
       setError("Заполните все поля");
       return;
@@ -33,7 +23,6 @@ export default function RegisterForm() {
       return;
     }
     if (password.length > 10) {
-      //интересно, можно ли как-то аккуратнее или эффективнее объединить два правила по длине пароля?
       setError("Пароль максимум 10 символов");
       return;
     }
@@ -41,61 +30,68 @@ export default function RegisterForm() {
       setError("Выберите хотя бы одну роль");
       return;
     }
-
-    //отображение обработки запроса
     setLoading(true);
-    //сама отправка запроса
     const response = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, isStudent, isMentor }),
     });
-
-    //ниже мы объявляем тело запроса, тут что будем использовать request.json?
-    const data = await response.json(); //круглые скобки возле json означают "выполни эту функцию", считай что это вызов метода и он тут будет пустым
-
-    //ниже ваполняю проверку успешно ли прошло или нет
+    const data = await response.json();
     if (!response.ok) {
       setError(data.message);
       setLoading(false);
       return;
     }
-    //редирект на нужную мне страницу(можно изменить позже)
-    setLoading(false); //это добавил на случаей если после редиректа на логин сделать шаг назад я МОГ создавать нового пользователя и не обновлять страницу ещё раз
+    setLoading(false);
     router.push("/login");
   };
 
-  //разметка
   return (
-    <div>
-      {/* пока что просто создам все инпуты и прочее, более красиво это обработаю позже, я про h1, сейчас главное чтобы работало */}
-      <input //email
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input //password
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input //isStudent, но главная загвоздка это как определить value, тут же не оно используется, а что-то по типу change, но не знаю как правильно это писать
-        type="checkbox" //обязательно чекбокс, ведь тут флажок, а не инпут
-        checked={isStudent} //вот это использовать для поднятия флажка
-        onChange={(e) => setIsStudent(e.target.checked)}
-      />
-      <input //isMentor
-        type="checkbox"
-        checked={isMentor}
-        onChange={(e) => setIsMentor(e.target.checked)}
-      />
-      {/* также нужно как-то ошибки добавить. пока что добавил вот таку ошибку снизу, но интересно а как добавить ошибку которая например сразу покажет что у человека которкий пароль, они же в самом инпуте пишутся?*/}
-      {error && <p>{error}</p>}
-      {/* кнопка */}
-      <button onClick={handleSubmit}>
-        {loading ? "Загрузка..." : "Зарегестрироваться"}
-        {/* тут использовал тернарный оператор, пока запрос выполняется показываю "загрузка...", иначе обычный текст*/}
-      </button>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-sm flex flex-col gap-4">
+        <h1 className="text-2xl font-bold text-center">Регистрация</h1>
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Пароль"
+          className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isStudent}
+              onChange={(e) => setIsStudent(e.target.checked)}
+              className="w-4 h-4"
+            />
+            <span>Я студент</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isMentor}
+              onChange={(e) => setIsMentor(e.target.checked)}
+              className="w-4 h-4"
+            />
+            <span>Я ментор</span>
+          </label>
+        </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-600 text-white rounded py-2 hover:bg-blue-700 transition"
+        >
+          {loading ? "Загрузка..." : "Зарегистрироваться"}
+        </button>
+      </div>
     </div>
   );
 }
