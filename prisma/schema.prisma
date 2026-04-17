@@ -28,6 +28,7 @@ model User {
   cvUploads         CvUpload[]
   cvComments        CvComment[]
   testResults       TestResult[]
+  mockupCards       MockupCard[]
 }
 
 //----------------Marketplace
@@ -46,7 +47,6 @@ model MentorProfile {
 
   techStack    MentorTechStack[]
   serviceTypes MentorServiceType[]
-  sessions     Session[]
 }
 
 model MentorTechStack {
@@ -63,15 +63,28 @@ model MentorServiceType {
   serviceType String
 }
 
+model MockupCard {
+  id          String   @id @default(uuid())
+  mentorId    String
+  mentor      User     @relation(fields: [mentorId], references: [id])
+  title       String
+  description String
+  techStack   String[] // массив строк: ["React", "TypeScript"]
+  format      String[]   // "interview" | "codereview" | "cvreview"
+  priceUsd    Int?     // null = бесплатно
+  createdAt   DateTime @default(now())
+
+  sessions    Session[]
+}
+
 //----------------Sessions and reviews
 model Session {
-  id            String        @id @default(uuid())
-  studentId     String
-  student       User          @relation("StudentSessions", fields: [studentId], references: [id])
-  mentorId      String
-  mentor        MentorProfile @relation(fields: [mentorId], references: [id])
+  id           String     @id @default(uuid())
+  studentId    String
+  student      User       @relation("StudentSessions", fields: [studentId], references: [id])
+  cardId       String
+  card         MockupCard @relation(fields: [cardId], references: [id])
 
-  serviceType   String
   studentLevel  String
   goal          String
   preferredTime String?
