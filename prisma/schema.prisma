@@ -26,7 +26,6 @@ model User {
   sessionsAsStudent Session[]  @relation("StudentSessions")
   reviews           Review[]
   cvUploads         CvUpload[]
-  cvComments        CvComment[]
   testResults       TestResult[]
   mockupCards       MockupCard[]
 }
@@ -117,18 +116,16 @@ model CvUpload {
   experience String
   createdAt  DateTime    @default(now())
 
-  comments   CvComment[]
+  results    CvResult[]
 }
 
-model CvComment {
-  id        String   @id @default(uuid())
-  cvId      String
-  cv        CvUpload @relation(fields: [cvId], references: [id], onDelete: Cascade)
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id])
-
-  text      String
-  createdAt DateTime @default(now())
+model CvResult {
+  id         String   @id @default(uuid())
+  cvId       String
+  cv         CvUpload @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  score      Int
+  rawJson    String   // весь ответ AI как JSON-строка
+  createdAt  DateTime @default(now())
 }
 
 //----------------Tests
