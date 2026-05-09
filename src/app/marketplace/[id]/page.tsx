@@ -24,9 +24,9 @@ interface MockupCard {
 }
 
 const FORMAT_LABELS: Record<string, string> = {
-  interview: "Интервью",
-  codereview: "Код-ревью",
-  cvreview: "CV ревью",
+  interview: "Interview",
+  codereview: "Code Review",
+  cvreview: "CV Review",
 };
 
 const LEVEL_OPTIONS = [
@@ -69,7 +69,7 @@ export default function CardPage() {
     setError(null);
 
     if (!form.studentLevel || !form.goal) {
-      setError("Заполните уровень и цель");
+      setError("Please fill in your level and goal");
       return;
     }
 
@@ -89,7 +89,7 @@ export default function CardPage() {
     setSubmitting(false);
 
     if (!res.ok) {
-      setError("Ошибка при отправке заявки");
+      setError("Failed to submit request");
       return;
     }
 
@@ -100,14 +100,14 @@ export default function CardPage() {
   if (loading)
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-500">
-        Загрузка...
+        Loading...
       </div>
     );
 
   if (!card)
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-500">
-        Карточка не найдена
+        Card not found
       </div>
     );
 
@@ -142,56 +142,56 @@ export default function CardPage() {
       </div>
 
       <p className="text-lg font-semibold">
-        {card.priceUsd ? `$${card.priceUsd}` : "Бесплатно"}
+        {card.priceUsd ? `$${card.priceUsd}` : "Free"}
       </p>
 
       <div className="border rounded-lg p-4 flex flex-col gap-1">
-        <p className="font-medium">{card.mentor.name ?? "Ментор"}</p>
+        <p className="font-medium">{card.mentor.name ?? "Mentor"}</p>
         <p className="text-sm text-gray-500">
-          Рейтинг: {card.mentor.mentorProfile?.rating ?? 0}
+          Rating: {card.mentor.mentorProfile?.rating ?? 0}
         </p>
         <p className="text-sm text-gray-500">
-          Сессий: {card.mentor.mentorProfile?.sessionsCount ?? 0}
+          Sessions: {card.mentor.mentorProfile?.sessionsCount ?? 0}
         </p>
         {card.mentor.mentorProfile?.contactInfo && (
           <p className="text-sm text-gray-500">
-            Контакт: {card.mentor.mentorProfile.contactInfo}
+            Contact: {card.mentor.mentorProfile.contactInfo}
           </p>
         )}
       </div>
 
       {success ? (
         <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
-          Заявка отправлена! Ментор свяжется с вами.
+          Request sent! The mentor will get in touch with you.
         </div>
       ) : isOwnCard ? (
-        <p className="text-sm text-gray-400">Это ваша карточка</p>
+        <p className="text-sm text-gray-400">This is your card</p>
       ) : !session ? (
         <button
           onClick={() => router.push("/login")}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
-          Войти чтобы записаться
+          Sign in to book
         </button>
       ) : !showForm ? (
         <button
           onClick={() => setShowForm(true)}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
-          Записаться
+          Book a session
         </button>
       ) : (
         <div className="border rounded-lg p-4 flex flex-col gap-4">
-          <h2 className="text-lg font-semibold">Заявка</h2>
+          <h2 className="text-lg font-semibold">Book a Session</h2>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-600">Ваш уровень</label>
+            <label className="text-sm text-gray-600">Your level</label>
             <select
               value={form.studentLevel}
               onChange={(e) => handleChange("studentLevel", e.target.value)}
               className="border rounded px-3 py-2 text-sm"
             >
-              <option value="">Выберите уровень</option>
+              <option value="">Select level</option>
               {LEVEL_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
@@ -201,26 +201,26 @@ export default function CardPage() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-600">Цель сессии</label>
+            <label className="text-sm text-gray-600">Session goal</label>
             <textarea
               value={form.goal}
               onChange={(e) => handleChange("goal", e.target.value)}
               className="border rounded px-3 py-2 text-sm resize-none"
               rows={3}
-              placeholder="Что хотите получить от сессии..."
+              placeholder="What do you want to get out of this session..."
             />
           </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-sm text-gray-600">
-              Удобное время (необязательно)
+              Preferred time (optional)
             </label>
             <input
               type="text"
               value={form.preferredTime}
               onChange={(e) => handleChange("preferredTime", e.target.value)}
               className="border rounded px-3 py-2 text-sm"
-              placeholder="например: вечером по будням"
+              placeholder="e.g. weekday evenings"
             />
           </div>
 
@@ -232,13 +232,13 @@ export default function CardPage() {
               disabled={submitting}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
             >
-              {submitting ? "Отправка..." : "Отправить заявку"}
+              {submitting ? "Submitting..." : "Submit request"}
             </button>
             <button
               onClick={() => setShowForm(false)}
               className="px-4 py-2 border rounded hover:bg-gray-50 transition"
             >
-              Отмена
+              Cancel
             </button>
           </div>
         </div>

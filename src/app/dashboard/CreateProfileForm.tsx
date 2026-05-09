@@ -32,41 +32,40 @@ export default function CreateProfileForm({
       });
   };
 
-  if (loading)
-    return <div className="text-gray-500 text-sm">Сохранение...</div>;
+  if (loading) return <div className="text-gray-500 text-sm">Saving...</div>;
 
   return (
     <div className="w-full flex flex-col gap-3 mt-4">
       <input
         value={position}
         onChange={(e) => setPosition(e.target.value)}
-        placeholder="Позиция"
+        placeholder="Position"
         className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Описание"
+        placeholder="Description"
         className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         value={priceUsd}
         onChange={(e) => setPriceUsd(e.target.value)}
-        placeholder="Цена (необязательно)"
+        placeholder="Price (optional)"
         type="number"
         className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         value={contactInfo}
         onChange={(e) => setContactInfo(e.target.value)}
-        placeholder="Контактные данные"
+        placeholder="Contact info"
         className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <button
         onClick={handleSubmit}
         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
       >
-        Сохранить
+        Save
       </button>
     </div>
   );

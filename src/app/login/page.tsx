@@ -14,7 +14,7 @@ export default function SignIn() {
   const handleSubmit = async () => {
     setError("");
     if (!email || !password) {
-      setError("Заполните поля формы");
+      setError("Please fill in all fields");
       return;
     }
     setLoading(true);
@@ -24,7 +24,7 @@ export default function SignIn() {
       password,
     });
     if (!result?.ok) {
-      setError("Неверный email или пароль");
+      setError("Invalid email or password");
       setLoading(false);
       return;
     }
@@ -32,14 +32,19 @@ export default function SignIn() {
     router.push("/dashboard");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSubmit();
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm flex flex-col gap-4">
-        <h1 className="text-2xl font-bold text-center">Вход</h1>
+        <h1 className="text-2xl font-bold text-center">Sign In</h1>
         <input
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Email"
           className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -47,21 +52,23 @@ export default function SignIn() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Пароль"
+          onKeyDown={handleKeyDown}
+          placeholder="Password"
           className="border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
           onClick={handleSubmit}
-          className="bg-blue-600 text-white rounded py-2 hover:bg-blue-700 transition"
+          disabled={loading}
+          className="bg-blue-600 text-white rounded py-2 hover:bg-blue-700 transition disabled:opacity-50"
         >
-          {loading ? "Выполняется вход..." : "Войти"}
+          {loading ? "Signing in..." : "Sign In"}
         </button>
         <button
           onClick={() => router.push("/register")}
           className="text-blue-600 text-sm text-center hover:underline"
         >
-          Нет аккаунта? Зарегистрироваться
+          Don&apos;t have an account? Sign Up
         </button>
       </div>
     </div>

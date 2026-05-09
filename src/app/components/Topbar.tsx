@@ -8,18 +8,18 @@ export default async function Topbar() {
 
   return (
     <nav className="w-full border-b px-6 py-3 flex items-center justify-between relative">
-      {/* Лого — слева */}
+      {/* Logo — left */}
       <Link href="/" className="font-bold text-lg shrink-0">
         Are You Ready?
       </Link>
 
-      {/* Навигация — по центру */}
+      {/* Navigation — center */}
       <div className="flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
         <Link
           href="/marketplace"
           className="text-sm text-gray-600 hover:text-black transition"
         >
-          Маркетплейс
+          Marketplace
         </Link>
         <Link
           href="/cv"
@@ -31,7 +31,7 @@ export default async function Topbar() {
           href="/tests"
           className="text-sm text-gray-600 hover:text-black transition"
         >
-          Тесты
+          Tests
         </Link>
         <Link
           href="/dashboard"
@@ -41,7 +41,7 @@ export default async function Topbar() {
         </Link>
       </div>
 
-      {/* Юзер-меню — справа */}
+      {/* User menu — right */}
       {session ? (
         <UserMenu email={session.user.email ?? ""} />
       ) : (
@@ -49,7 +49,7 @@ export default async function Topbar() {
           href="/login"
           className="text-sm bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition shrink-0"
         >
-          Войти
+          Sign In
         </Link>
       )}
     </nav>

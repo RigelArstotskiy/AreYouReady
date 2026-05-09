@@ -58,8 +58,8 @@ export default function ProfileView() {
       const res = await fetch("/api/profile");
       const data = await res.json();
       setProfile(data.profile);
-      setName(data.profile.name ?? ""); // ← добавить
-      setBio(data.profile.bio ?? ""); // ← добавить
+      setName(data.profile.name ?? "");
+      setBio(data.profile.bio ?? "");
       setLoading(false);
     };
     fetchProfile();
@@ -67,11 +67,10 @@ export default function ProfileView() {
 
   return (
     <div>
-      {loading && <p>Загрузка...</p>}
+      {loading && <p>Loading...</p>}
 
       {!loading && profile && !isEditing && (
         <div className="max-w-lg mx-auto mt-10 p-6 flex flex-col items-center gap-4">
-          {/* Аватар */}
           <Image
             src={profile.image ?? "/default-avatar.png"}
             alt="avatar"
@@ -80,30 +79,26 @@ export default function ProfileView() {
             className="rounded-full object-cover"
           />
 
-          {/* Имя и email */}
           <div className="text-center">
-            <h1 className="text-xl font-bold">{profile.name ?? "Без имени"}</h1>
+            <h1 className="text-xl font-bold">{profile.name ?? "No name"}</h1>
             <p className="text-gray-500">{profile.email}</p>
           </div>
 
-          {/* Bio */}
           <p className="text-center text-gray-700">
-            {profile.bio ?? "Описание не добавлено"}
+            {profile.bio ?? "No bio added"}
           </p>
 
-          {/* Кнопка редактирования */}
           <button
             onClick={() => setIsEditing(true)}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-            Редактировать
+            Edit profile
           </button>
         </div>
       )}
 
       {!loading && profile && isEditing && (
         <div className="max-w-lg mx-auto mt-10 p-6 flex flex-col gap-4">
-          {/* Загрузка аватара */}
           <div className="flex flex-col items-center gap-2">
             <Image
               src={profile.image ?? "/default-avatar.png"}
@@ -112,39 +107,44 @@ export default function ProfileView() {
               height={96}
               className="rounded-full object-cover"
             />
-            <input type="file" accept="image/*" onChange={handleAvatarChange} />
+            <label className="cursor-pointer text-sm text-blue-600 hover:underline">
+              Change photo
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+                className="hidden"
+              />
+            </label>
           </div>
 
-          {/* Имя */}
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Имя"
+            placeholder="Name"
             className="border rounded px-3 py-2"
           />
 
-          {/* Bio */}
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            placeholder="О себе"
+            placeholder="About you"
             className="border rounded px-3 py-2 resize-none h-28"
           />
 
-          {/* Кнопки */}
           <div className="flex gap-2">
             <button
               onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              Сохранить
+              Save
             </button>
             <button
               onClick={() => setIsEditing(false)}
               className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
             >
-              Отмена
+              Cancel
             </button>
           </div>
         </div>

@@ -21,9 +21,9 @@ interface MockupCard {
 }
 
 const FORMAT_OPTIONS = [
-  { value: "interview", label: "Интервью" },
-  { value: "codereview", label: "Код-ревью" },
-  { value: "cvreview", label: "CV ревью" },
+  { value: "interview", label: "Interview" },
+  { value: "codereview", label: "Code Review" },
+  { value: "cvreview", label: "CV Review" },
 ];
 
 export default function MarketplacePage() {
@@ -63,20 +63,20 @@ export default function MarketplacePage() {
   if (loading)
     return (
       <div className="flex items-center justify-center min-h-screen text-gray-500">
-        Загрузка...
+        Loading...
       </div>
     );
 
   return (
     <div className="max-w-5xl mx-auto mt-10 px-4 flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">Маркетплейс мок-интервью</h1>
+      <h1 className="text-2xl font-bold">Mock Interview Marketplace</h1>
 
       <div className="flex flex-wrap gap-4 p-4 border rounded-lg bg-gray-50">
         <input
           type="text"
           value={filterTech}
           onChange={(e) => setFilterTech(e.target.value)}
-          placeholder="Поиск по стеку..."
+          placeholder="Search by tech stack..."
           className="border rounded px-3 py-2 text-sm"
         />
 
@@ -85,7 +85,7 @@ export default function MarketplacePage() {
           onChange={(e) => setFilterFormat(e.target.value)}
           className="border rounded px-3 py-2 text-sm"
         >
-          <option value="">Все форматы</option>
+          <option value="">All formats</option>
           {FORMAT_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
@@ -98,14 +98,14 @@ export default function MarketplacePage() {
           onChange={(e) => setFilterPrice(e.target.value)}
           className="border rounded px-3 py-2 text-sm"
         >
-          <option value="all">Любая цена</option>
-          <option value="free">Бесплатно</option>
-          <option value="paid">Платно</option>
+          <option value="all">Any price</option>
+          <option value="free">Free</option>
+          <option value="paid">Paid</option>
         </select>
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-gray-400">Карточек не найдено</p>
+        <p className="text-gray-400">No cards found</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((card) => (
@@ -143,10 +143,10 @@ export default function MarketplacePage() {
 
               <div className="flex items-center justify-between mt-auto pt-2">
                 <p className="text-sm font-medium">
-                  {card.priceUsd ? `$${card.priceUsd}` : "Бесплатно"}
+                  {card.priceUsd ? `$${card.priceUsd}` : "Free"}
                 </p>
                 <p className="text-xs text-gray-400">
-                  {card.mentor.name ?? "Ментор"}
+                  {card.mentor.name ?? "Mentor"}
                 </p>
               </div>
             </Link>

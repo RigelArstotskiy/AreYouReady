@@ -4,9 +4,9 @@ import { useState } from "react";
 import TagInput from "./TagInput";
 
 const FORMAT_OPTIONS = [
-  { value: "interview", label: "Интервью" },
-  { value: "codereview", label: "Код-ревью" },
-  { value: "cvreview", label: "CV ревью" },
+  { value: "interview", label: "Interview" },
+  { value: "codereview", label: "Code Review" },
+  { value: "cvreview", label: "CV Review" },
 ];
 
 interface EditCardFormProps {
@@ -53,12 +53,12 @@ export default function EditCardForm({
     setError(null);
 
     if (!form.title || !form.description) {
-      setError("Заполните название и описание");
+      setError("Please fill in the title and description");
       return;
     }
 
     if (formats.length === 0) {
-      setError("Выберите хотя бы один формат");
+      setError("Please select at least one format");
       return;
     }
 
@@ -79,7 +79,7 @@ export default function EditCardForm({
     setLoading(false);
 
     if (!res.ok) {
-      setError("Ошибка при сохранении");
+      setError("Failed to save changes");
       return;
     }
 
@@ -88,10 +88,10 @@ export default function EditCardForm({
 
   return (
     <div className="border rounded-lg p-6 flex flex-col gap-4 bg-gray-50">
-      <h2 className="text-lg font-semibold">Редактировать карточку</h2>
+      <h2 className="text-lg font-semibold">Edit Card</h2>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Название</label>
+        <label className="text-sm text-gray-600">Title</label>
         <input
           type="text"
           value={form.title}
@@ -101,7 +101,7 @@ export default function EditCardForm({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Описание</label>
+        <label className="text-sm text-gray-600">Description</label>
         <textarea
           value={form.description}
           onChange={(e) => handleChange("description", e.target.value)}
@@ -111,12 +111,12 @@ export default function EditCardForm({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Стек технологий</label>
+        <label className="text-sm text-gray-600">Tech stack</label>
         <TagInput value={techStack} onChange={setTechStack} />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm text-gray-600">Формат</label>
+        <label className="text-sm text-gray-600">Format</label>
         {FORMAT_OPTIONS.map((opt) => (
           <label key={opt.value} className="flex items-center gap-2 text-sm">
             <input
@@ -130,13 +130,13 @@ export default function EditCardForm({
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Цена (USD)</label>
+        <label className="text-sm text-gray-600">Price (USD)</label>
         <input
           type="number"
           value={form.priceUsd}
           onChange={(e) => handleChange("priceUsd", e.target.value)}
           className="border rounded px-3 py-2 text-sm"
-          placeholder="Оставьте пустым если бесплатно"
+          placeholder="Leave empty if free"
           min={0}
         />
       </div>
@@ -149,13 +149,13 @@ export default function EditCardForm({
           disabled={loading}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
         >
-          {loading ? "Сохранение..." : "Сохранить"}
+          {loading ? "Saving..." : "Save"}
         </button>
         <button
           onClick={onCancel}
           className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
         >
-          Отмена
+          Cancel
         </button>
       </div>
     </div>

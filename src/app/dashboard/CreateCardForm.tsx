@@ -4,9 +4,9 @@ import { useState } from "react";
 import TagInput from "./TagInput";
 
 const FORMAT_OPTIONS = [
-  { value: "interview", label: "Интервью" },
-  { value: "codereview", label: "Код-ревью" },
-  { value: "cvreview", label: "CV ревью" },
+  { value: "interview", label: "Interview" },
+  { value: "codereview", label: "Code Review" },
+  { value: "cvreview", label: "CV Review" },
 ];
 
 interface CreateCardFormProps {
@@ -40,12 +40,12 @@ export default function CreateCardForm({ onSuccess }: CreateCardFormProps) {
     setError(null);
 
     if (!form.title || !form.description) {
-      setError("Заполните название и описание");
+      setError("Please fill in the title and description");
       return;
     }
 
     if (formats.length === 0) {
-      setError("Выберите хотя бы один формат");
+      setError("Please select at least one format");
       return;
     }
 
@@ -66,7 +66,7 @@ export default function CreateCardForm({ onSuccess }: CreateCardFormProps) {
     setLoading(false);
 
     if (!res.ok) {
-      setError("Ошибка при создании карточки");
+      setError("Failed to create card");
       return;
     }
 
@@ -75,37 +75,37 @@ export default function CreateCardForm({ onSuccess }: CreateCardFormProps) {
 
   return (
     <div className="border rounded-lg p-6 flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">Новая карточка</h2>
+      <h2 className="text-lg font-semibold">New Card</h2>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Название</label>
+        <label className="text-sm text-gray-600">Title</label>
         <input
           type="text"
           value={form.title}
           onChange={(e) => handleChange("title", e.target.value)}
           className="border rounded px-3 py-2 text-sm"
-          placeholder="например: Мок-интервью по React"
+          placeholder="e.g. React Mock Interview"
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Описание</label>
+        <label className="text-sm text-gray-600">Description</label>
         <textarea
           value={form.description}
           onChange={(e) => handleChange("description", e.target.value)}
           className="border rounded px-3 py-2 text-sm resize-none"
           rows={3}
-          placeholder="Что входит в сессию, чего ожидать..."
+          placeholder="What's included in the session, what to expect..."
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Стек технологий</label>
+        <label className="text-sm text-gray-600">Tech stack</label>
         <TagInput value={techStack} onChange={setTechStack} />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-sm text-gray-600">Формат</label>
+        <label className="text-sm text-gray-600">Format</label>
         {FORMAT_OPTIONS.map((opt) => (
           <label key={opt.value} className="flex items-center gap-2 text-sm">
             <input
@@ -119,13 +119,13 @@ export default function CreateCardForm({ onSuccess }: CreateCardFormProps) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm text-gray-600">Цена (USD)</label>
+        <label className="text-sm text-gray-600">Price (USD)</label>
         <input
           type="number"
           value={form.priceUsd}
           onChange={(e) => handleChange("priceUsd", e.target.value)}
           className="border rounded px-3 py-2 text-sm"
-          placeholder="Оставьте пустым если бесплатно"
+          placeholder="Leave empty if free"
           min={0}
         />
       </div>
@@ -137,7 +137,7 @@ export default function CreateCardForm({ onSuccess }: CreateCardFormProps) {
         disabled={loading}
         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
       >
-        {loading ? "Создание..." : "Создать карточку"}
+        {loading ? "Creating..." : "Create card"}
       </button>
     </div>
   );

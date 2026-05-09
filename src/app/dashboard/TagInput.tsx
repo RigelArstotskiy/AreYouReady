@@ -1,4 +1,4 @@
-"use clint";
+"use client";
 
 import { useState } from "react";
 
@@ -78,7 +78,7 @@ export default function TagInput({ value, onChange }: TagInputProps) {
           onFocus={() => setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 150)}
           onKeyDown={handleKeyDown}
-          placeholder="Добавить технологию..."
+          placeholder="Add technology..."
           className="w-full border rounded px-3 py-2 text-sm"
         />
 
