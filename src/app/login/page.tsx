@@ -30,6 +30,7 @@ export default function SignIn() {
     }
     setLoading(false);
     router.push("/dashboard");
+    router.refresh();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
